@@ -20,5 +20,11 @@ namespace Blog.API.Controllers.Authentication
             ReturnBase<bool> response = await Mediator.Send(command);
             return ReturnResult(response);
         }
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginCommand command)
+        {
+            ReturnBase<string> response = await Mediator.Send(command);
+            return ReturnResult(response);
+        }
     }
 }

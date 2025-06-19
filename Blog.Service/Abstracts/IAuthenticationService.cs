@@ -6,5 +6,6 @@ namespace Blog.Service.Abstracts
     public interface IAuthenticationService
     {
         Task<ReturnBase<bool>> RegisterUserAsync(ApplicationUser user, string password);
+        Task<ReturnBase<string>> LoginAsync(string email, string password);
     }
 }

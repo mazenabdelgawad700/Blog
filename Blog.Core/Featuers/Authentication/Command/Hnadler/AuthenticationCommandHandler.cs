@@ -8,7 +8,8 @@ using MediatR;
 namespace Blog.Core.Featuers.Authentication.Command.Hnadler
 {
     public class AuthenticationCommandHandler : ReturnBaseHandler, IRequestHandler<RegisterUserCommand, ReturnBase<bool>>,
-        IRequestHandler<ConfirmEmailCommand, ReturnBase<bool>>
+        IRequestHandler<ConfirmEmailCommand, ReturnBase<bool>>,
+        IRequestHandler<LoginCommand, ReturnBase<string>>
     {
 
         private readonly IAuthenticationService _authenticationService;
@@ -45,7 +46,7 @@ namespace Blog.Core.Featuers.Authentication.Command.Hnadler
                 if (!registerUserResult.Succeeded)
                     return Failed<bool>(registerUserResult.Message);
 
-                return Success(true);
+                return Success(true, registerUserResult.Message);
             }
             catch (Exception ex)
             {
@@ -69,5 +70,23 @@ namespace Blog.Core.Featuers.Authentication.Command.Hnadler
                 return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
+
+        public async Task<ReturnBase<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var loginResult = await _authenticationService.LoginAsync(request.Email, request.Password);
+
+                if (!loginResult.Succeeded)
+                    return Failed<string>(loginResult.Message);
+
+                return Success(loginResult.Data!, loginResult.Message);
+            }
+            catch (Exception ex)
+            {
+                return Failed<string>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+
     }
 }
