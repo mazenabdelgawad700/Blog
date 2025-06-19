@@ -15,12 +15,6 @@ namespace Blog.Infrastructure.Configurations
                 .HasMaxLength(500)
                 .IsUnicode();
 
-            builder.Property(u => u.FirstName)
-                .HasMaxLength(100);
-
-            builder.Property(u => u.LastName)
-                .HasMaxLength(100);
-
             builder.Property(u => u.ProfilePictureUrl)
                 .HasMaxLength(500);
 

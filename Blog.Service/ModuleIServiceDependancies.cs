@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Blog.Service.Abstracts;
+using Blog.Service.Implementaions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Blog.Service
 {
@@ -6,7 +8,10 @@ namespace Blog.Service
     {
         public static IServiceCollection AddServiceDependencies(this IServiceCollection services)
         {
-            //services.AddTransient<IApplicationUserService, ApplicationUserService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IImageService, ImageService>();
+            services.AddTransient<ISendEmailService, SendEmailService>();
+            services.AddTransient<IConfirmEmailService, ConfirmEmailService>();
             return services;
         }
     }

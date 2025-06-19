@@ -8,13 +8,7 @@ namespace Blog.Domain.Entities
         [StringLength(500)]
         public string? Bio { get; set; }
 
-        [StringLength(100)]
-        public string? FirstName { get; set; }
-
-        [StringLength(100)]
-        public string? LastName { get; set; }
-
-        public string? ProfilePictureUrl { get; set; }
+        public string ProfilePictureUrl { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? LastLoginAt { get; set; }

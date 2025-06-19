@@ -24,12 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Blog.Domain\Blog.Domain.csproj" />
     <ProjectReference Include="..\Blog.Shared\Blog.Shared.csproj" />
-  </ItemGroup>   
-  
-  <ItemGroup>
-    <Folder Include="Abstracts\" />
-    <Folder Include="RepositoriesBase\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>

@@ -26,8 +26,7 @@
 
 
   <ItemGroup>
-    <Folder Include="Featuers\" />
-    <Folder Include="Mapping\" />
+    <Folder Include="Featuers\Authentication\Query\" />
     <Folder Include="MiddleWare\" />
     <Folder Include="Wrappers\" />
   </ItemGroup>

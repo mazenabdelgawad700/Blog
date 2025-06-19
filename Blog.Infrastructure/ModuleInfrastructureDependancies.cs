@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Blog.Infrastructure.Abstracts;
+using Blog.Infrastructure.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Blog.Infrastructure
 {
@@ -6,7 +8,7 @@ namespace Blog.Infrastructure
     {
         public static IServiceCollection AddInfrastructureDependencies(this IServiceCollection services)
         {
-            //services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IAuthenticationRepository, AuthenticationRepository>();
             return services;
         }
     }
