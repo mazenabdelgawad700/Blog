@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Blog.Domain\Blog.Domain.csproj" />
+    <ProjectReference Include="..\Blog.Infrastructure\Blog.Infrastructure.csproj" />
+    <ProjectReference Include="..\Blog.Service\Blog.Service.csproj" />
+    <ProjectReference Include="..\Blog.Shared\Blog.Shared.csproj" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.10" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <Folder Include="Featuers\" />
+    <Folder Include="Mapping\" />
+    <Folder Include="MiddleWare\" />
+    <Folder Include="Wrappers\" />
+  </ItemGroup>
+
+</Project>
