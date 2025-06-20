@@ -23,7 +23,7 @@ namespace Blog.Service.Implementaions
         public AuthenticationService(UserManager<ApplicationUser> userManager, IConfirmEmailService confirmEmailService, AppDbContext dbContext, JwtSettings jwtSettings)
         {
             this._userManager = userManager;
-            _confirmEmailService = confirmEmailService;
+            this._confirmEmailService = confirmEmailService;
             this._dbContext = dbContext;
             this._jwtSettings = jwtSettings;
         }
