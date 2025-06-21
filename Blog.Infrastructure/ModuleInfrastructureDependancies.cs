@@ -9,6 +9,7 @@ namespace Blog.Infrastructure
         public static IServiceCollection AddInfrastructureDependencies(this IServiceCollection services)
         {
             services.AddTransient<IAuthenticationRepository, AuthenticationRepository>();
+            services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
             return services;
         }
     }

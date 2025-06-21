@@ -143,7 +143,7 @@ namespace Blog.Infrastructure.RepositoriesBase
             }
             catch (Exception ex)
             {
-                return Failed<bool>(ex.InnerException.Message);
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
         public async Task<ReturnBase<bool>> UpdateRangeAsync(ICollection<T> entities)

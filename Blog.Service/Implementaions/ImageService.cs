@@ -27,17 +27,17 @@ namespace Blog.Service.Implementaions
         }
         public ReturnBase<bool> Delete(string imgFullPath)
         {
-            string imgName = Path.GetFileName(imgFullPath);
-            if (string.IsNullOrEmpty(imgName))
-                return Failed<bool>($"file({nameof(imgName)}) is null");
+            //string imgName = Path.GetFileName(imgFullPath);
+            if (string.IsNullOrEmpty(imgFullPath))
+                return Failed<bool>($"file({nameof(imgFullPath)}) is null");
 
-            string contentPath = @"D:\BlogImages\";
-            string path = Path.Combine(contentPath, imgName);
+            //string contentPath = @"D:\BlogImages\";
+            //string path = Path.Combine(contentPath, imgName);
 
-            if (!File.Exists(path))
+            if (!File.Exists(imgFullPath))
                 return Failed<bool>("Image dose not exist");
 
-            File.Delete(path);
+            File.Delete(imgFullPath);
             return Success(true, "Image Deleted Successfully");
         }
     }

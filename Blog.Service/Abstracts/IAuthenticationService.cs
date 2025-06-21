@@ -7,5 +7,8 @@ namespace Blog.Service.Abstracts
     {
         Task<ReturnBase<bool>> RegisterUserAsync(ApplicationUser user, string password);
         Task<ReturnBase<string>> LoginAsync(string email, string password);
+        Task<ReturnBase<bool>> ResetPasswordAsync(string resetPasswordToken, string newPassword, string email);
+        Task<ReturnBase<bool>> SendResetPasswordEmailAsync(string email);
+        Task<ReturnBase<string>> RefreshTokenAsync(string accessToken);
     }
 }

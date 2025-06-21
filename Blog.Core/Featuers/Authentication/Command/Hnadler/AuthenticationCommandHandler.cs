@@ -9,7 +9,10 @@ namespace Blog.Core.Featuers.Authentication.Command.Hnadler
 {
     public class AuthenticationCommandHandler : ReturnBaseHandler, IRequestHandler<RegisterUserCommand, ReturnBase<bool>>,
         IRequestHandler<ConfirmEmailCommand, ReturnBase<bool>>,
-        IRequestHandler<LoginCommand, ReturnBase<string>>
+        IRequestHandler<ResetPasswordCommand, ReturnBase<bool>>,
+        IRequestHandler<SendResetPasswordEmailCommand, ReturnBase<bool>>,
+        IRequestHandler<LoginCommand, ReturnBase<string>>,
+        IRequestHandler<RefreshTokenCommand, ReturnBase<string>>
     {
 
         private readonly IAuthenticationService _authenticationService;
@@ -70,7 +73,6 @@ namespace Blog.Core.Featuers.Authentication.Command.Hnadler
                 return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
-
         public async Task<ReturnBase<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             try
@@ -81,6 +83,54 @@ namespace Blog.Core.Featuers.Authentication.Command.Hnadler
                     return Failed<string>(loginResult.Message);
 
                 return Success(loginResult.Data!, loginResult.Message);
+            }
+            catch (Exception ex)
+            {
+                return Failed<string>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<bool>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var resetPasswordResult = await _authenticationService.ResetPasswordAsync(request.ResetPasswordToken, request.NewPassword, request.Email);
+
+                if (!resetPasswordResult.Succeeded)
+                    return Failed<bool>(resetPasswordResult.Message);
+
+                return Success(true, resetPasswordResult.Message);
+            }
+            catch (Exception ex)
+            {
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<bool>> Handle(SendResetPasswordEmailCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var sendResentPasswordEmailResult = await _authenticationService.SendResetPasswordEmailAsync(request.Email);
+
+                if (!sendResentPasswordEmailResult.Succeeded)
+                    return Failed<bool>(sendResentPasswordEmailResult.Message);
+
+                return Success(sendResentPasswordEmailResult.Data, sendResentPasswordEmailResult.Message);
+            }
+            catch (Exception ex)
+            {
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<string>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var refreshTokenResult = await _authenticationService.RefreshTokenAsync(request.AccessToken);
+
+                if (!refreshTokenResult.Succeeded)
+                    return Failed<string>(refreshTokenResult.Message);
+
+                return Success(refreshTokenResult.Data!, refreshTokenResult.Message);
             }
             catch (Exception ex)
             {
