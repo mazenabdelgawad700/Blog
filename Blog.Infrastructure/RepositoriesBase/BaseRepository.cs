@@ -30,7 +30,7 @@ namespace Blog.Infrastructure.RepositoriesBase
             }
             catch (Exception ex)
             {
-                return Failed<bool>(ex.InnerException.Message);
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
         public async Task<ReturnBase<bool>> AddRangeAsync(ICollection<T> entities)
@@ -46,7 +46,7 @@ namespace Blog.Infrastructure.RepositoriesBase
             }
             catch (Exception ex)
             {
-                return Failed<bool>(ex.InnerException.Message);
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
         public async Task<IDbContextTransaction> BeginTransactionAsync()
@@ -72,7 +72,7 @@ namespace Blog.Infrastructure.RepositoriesBase
             }
             catch (Exception ex)
             {
-                return Failed<bool>(ex.InnerException.Message);
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
         public async Task<ReturnBase<bool>> DeleteRangeAsync(ICollection<T> entities)
@@ -89,7 +89,7 @@ namespace Blog.Infrastructure.RepositoriesBase
             }
             catch (Exception ex)
             {
-                return Failed<bool>(ex.InnerException.Message);
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
         public async Task<ReturnBase<T>> GetByIdAsync(int id)
@@ -108,7 +108,7 @@ namespace Blog.Infrastructure.RepositoriesBase
             }
             catch (Exception ex)
             {
-                return Failed<T>(ex.InnerException.Message);
+                return Failed<T>(ex.InnerException?.Message ?? ex.Message);
             }
         }
         public ReturnBase<IQueryable<T>> GetTableAsTracking()
@@ -119,7 +119,7 @@ namespace Blog.Infrastructure.RepositoriesBase
             }
             catch (Exception ex)
             {
-                return Failed<IQueryable<T>>(ex.InnerException.Message);
+                return Failed<IQueryable<T>>(ex.InnerException?.Message ?? ex.Message);
             }
         }
         public ReturnBase<IQueryable<T>> GetTableNoTracking()
@@ -130,7 +130,7 @@ namespace Blog.Infrastructure.RepositoriesBase
             }
             catch (Exception ex)
             {
-                return Failed<IQueryable<T>>(ex.InnerException.Message);
+                return Failed<IQueryable<T>>(ex.InnerException?.Message ?? ex.Message);
             }
         }
         public async Task<ReturnBase<bool>> UpdateAsync(T entity)
@@ -156,7 +156,7 @@ namespace Blog.Infrastructure.RepositoriesBase
             }
             catch (Exception ex)
             {
-                return Failed<bool>(ex.InnerException.Message);
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
         public async Task SaveChangesAsync()

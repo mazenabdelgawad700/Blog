@@ -51,7 +51,7 @@ namespace Blog.Service.Implementaions
                 return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
-        public async Task<ReturnBase<ApplicationUser>> GetUserById(string userId)
+        public async Task<ReturnBase<ApplicationUser>> GetUserByIdAsync(string userId)
         {
             try
             {

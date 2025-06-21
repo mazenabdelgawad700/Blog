@@ -7,6 +7,6 @@ namespace Blog.Service.Abstracts
     {
         Task<ReturnBase<bool>> UpdateUserProfileAsync(ApplicationUser user);
         Task<ReturnBase<bool>> IsEmailUsedAsync(string emailAddress);
-        Task<ReturnBase<ApplicationUser>> GetUserById(string userId);
+        Task<ReturnBase<ApplicationUser>> GetUserByIdAsync(string userId);
     }
 }

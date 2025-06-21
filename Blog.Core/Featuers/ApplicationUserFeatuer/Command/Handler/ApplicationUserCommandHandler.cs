@@ -30,7 +30,7 @@ namespace Blog.Core.Featuers.ApplicationUserFeatuer.Command.Handler
         {
             try
             {
-                var getUserByIdResult = await _applicationUserService.GetUserById(request.Id);
+                var getUserByIdResult = await _applicationUserService.GetUserByIdAsync(request.Id);
 
                 if (!getUserByIdResult.Succeeded)
                     return Failed<bool>("Invalid user id");
