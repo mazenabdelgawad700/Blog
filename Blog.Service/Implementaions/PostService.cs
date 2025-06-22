@@ -79,5 +79,22 @@ namespace Blog.Service.Implementaions
                 return Failed<Post>(ex.InnerException?.Message ?? ex.Message);
             }
         }
+
+        public async Task<ReturnBase<IQueryable<Post>>> GetPostsAsync()
+        {
+            try
+            {
+                var getPostsResult = await _postRespository.GetPostsAsync();
+
+                if (!getPostsResult.Succeeded)
+                    return Failed<IQueryable<Post>>(getPostsResult.Message);
+
+                return Success(getPostsResult.Data!);
+            }
+            catch (Exception ex)
+            {
+                return Failed<IQueryable<Post>>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
     }
 }

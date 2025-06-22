@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Blog.Core.Featuers.Post.Query.Model;
 using Blog.Core.Featuers.Post.Query.Response;
+using Blog.Core.Wrappers;
 using Blog.Service.Abstracts;
 using Blog.Shared.Base;
 using MediatR;
@@ -9,6 +10,7 @@ namespace Blog.Core.Featuers.Post.Query.Handler
 {
     public class PostQueryHandler : ReturnBaseHandler
         , IRequestHandler<GetPostByIdQuery, ReturnBase<GetPostByIdResponse>>
+        , IRequestHandler<GetPostsQuery, ReturnBase<PaginatedResult<GetPostsResponse>>>
     {
         private readonly IPostService _postService;
         private readonly IMapper _mapper;
@@ -43,6 +45,24 @@ namespace Blog.Core.Featuers.Post.Query.Handler
             catch (Exception ex)
             {
                 return Failed<GetPostByIdResponse>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<PaginatedResult<GetPostsResponse>>> Handle(GetPostsQuery request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var getPostsResult = await _postService.GetPostsAsync();
+
+                if (!getPostsResult.Succeeded)
+                    return Failed<PaginatedResult<GetPostsResponse>>(getPostsResult.Message);
+
+                var mappedResult = await _mapper.ProjectTo<GetPostsResponse>(getPostsResult.Data).ToPaginatedListAsync(request.PageNumber, request.PageSize);
+
+                return Success(mappedResult);
+            }
+            catch (Exception ex)
+            {
+                return Failed<PaginatedResult<GetPostsResponse>>(ex.InnerException?.Message ?? ex.Message);
             }
         }
     }

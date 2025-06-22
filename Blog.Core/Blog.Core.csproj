@@ -28,7 +28,6 @@
   <ItemGroup>
     <Folder Include="Featuers\Authentication\Query\" />
     <Folder Include="MiddleWare\" />
-    <Folder Include="Wrappers\" />
   </ItemGroup>
 
 </Project>

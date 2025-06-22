@@ -61,5 +61,16 @@ namespace Blog.Infrastructure.Repositories
                 return Failed<Post>(ex.InnerException?.Message ?? ex.Message);
             }
         }
+        public async Task<ReturnBase<IQueryable<Post>>> GetPostsAsync()
+        {
+            var posts = _posts
+                .Include(x => x.User)
+                .Include(x => x.PostPictures)
+                .Include(x => x.Likes)
+                .OrderByDescending(x => x.CreatedAt)
+                .AsQueryable();
+
+            return await Task.FromResult(Success(posts));
+        }
     }
 }

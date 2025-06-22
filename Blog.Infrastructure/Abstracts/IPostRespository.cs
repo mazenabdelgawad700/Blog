@@ -8,5 +8,6 @@ namespace Blog.Infrastructure.Abstracts
     {
         Task<ReturnBase<int>> AddPostAsync(Post post);
         Task<ReturnBase<Post>> GetPostAsync(int postId);
+        Task<ReturnBase<IQueryable<Post>>> GetPostsAsync();
     }
 }
