@@ -42,5 +42,12 @@ namespace Blog.API.Controllers.Post
             var Result = await Mediator.Send(query);
             return ReturnResult(Result);
         }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ToggleLike([FromBody] ToggleLikeButtonCommand command)
+        {
+            var Result = await Mediator.Send(command);
+            return ReturnResult(Result);
+        }
     }
 }

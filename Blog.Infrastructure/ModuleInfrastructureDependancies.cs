@@ -12,6 +12,7 @@ namespace Blog.Infrastructure
             services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddTransient<IPostPictureRespository, PostPictureRespository>();
             services.AddTransient<IPostRespository, PostRespository>();
+            services.AddTransient<ILikeRepository, LikeRepository>();
             return services;
         }
     }

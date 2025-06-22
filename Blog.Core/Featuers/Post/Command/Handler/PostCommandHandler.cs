@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Blog.Core.Featuers.Post.Command.Model;
+using Blog.Domain.Entities;
 using Blog.Service.Abstracts;
 using Blog.Shared.Base;
 using MediatR;
@@ -8,17 +9,20 @@ namespace Blog.Core.Featuers.Post.Command.Handler
 {
     public class PostCommandHandler : ReturnBaseHandler,
         IRequestHandler<AddPostCommand, ReturnBase<bool>>,
-        IRequestHandler<UpdatePostCommand, ReturnBase<bool>>
+        IRequestHandler<UpdatePostCommand, ReturnBase<bool>>,
+        IRequestHandler<ToggleLikeButtonCommand, ReturnBase<bool>>
     {
         private readonly IPostService _postService;
         private readonly IPostPictureService _postPictureService;
+        private readonly ILikeService _likeService;
         private readonly IMapper _mapper;
 
-        public PostCommandHandler(IPostService postService, IPostPictureService postPictureService, IMapper mapper)
+        public PostCommandHandler(IPostService postService, IPostPictureService postPictureService, IMapper mapper, ILikeService likeService)
         {
             _postService = postService;
             _postPictureService = postPictureService;
             _mapper = mapper;
+            _likeService = likeService;
         }
 
         public async Task<ReturnBase<bool>> Handle(AddPostCommand request, CancellationToken cancellationToken)
@@ -43,7 +47,6 @@ namespace Blog.Core.Featuers.Post.Command.Handler
                 return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
-
         public async Task<ReturnBase<bool>> Handle(UpdatePostCommand request, CancellationToken cancellationToken)
         {
             try
@@ -73,6 +76,23 @@ namespace Blog.Core.Featuers.Post.Command.Handler
 
                 if (!updatePostPicturesResult.Succeeded)
                     return Failed<bool>(updatePostPicturesResult.Message);
+
+                return Success(true);
+            }
+            catch (Exception ex)
+            {
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<bool>> Handle(ToggleLikeButtonCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var mappedResult = _mapper.Map<Like>(request);
+                var toggleLikeResult = await _likeService.ToggleLikeAsync(mappedResult);
+
+                if (!toggleLikeResult.Succeeded)
+                    return Failed<bool>(toggleLikeResult.Message);
 
                 return Success(true);
             }
