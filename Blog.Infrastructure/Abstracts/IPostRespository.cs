@@ -7,5 +7,6 @@ namespace Blog.Infrastructure.Abstracts
     public interface IPostRespository : IBaseRepository<Post>
     {
         Task<ReturnBase<int>> AddPostAsync(Post post);
+        Task<ReturnBase<Post>> GetPostAsync(int postId);
     }
 }

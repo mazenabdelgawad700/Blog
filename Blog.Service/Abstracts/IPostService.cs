@@ -8,5 +8,6 @@ namespace Blog.Service.Abstracts
         Task<ReturnBase<int>> AddPostAsync(Post post);
         Task<ReturnBase<bool>> UpdatePostAsync(Post post);
         Task<ReturnBase<Post>> GetPostForUpdateAsync(int postId);
+        Task<ReturnBase<Post>> GetPostByIdAsync(int postId);
     }
 }

@@ -64,5 +64,20 @@ namespace Blog.Service.Implementaions
                 return Failed<Post>(ex.InnerException?.Message ?? ex.Message);
             }
         }
+        public async Task<ReturnBase<Post>> GetPostByIdAsync(int postId)
+        {
+            try
+            {
+                var getPostResult = await _postRespository.GetPostAsync(postId);
+                if (!getPostResult.Succeeded)
+                    return Failed<Post>(getPostResult.Message);
+
+                return Success(getPostResult.Data!);
+            }
+            catch (Exception ex)
+            {
+                return Failed<Post>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
     }
 }

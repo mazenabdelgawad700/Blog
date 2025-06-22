@@ -31,5 +31,35 @@ namespace Blog.Infrastructure.Repositories
                 return Failed<int>(ex.InnerException?.Message ?? ex.Message);
             }
         }
+        public async Task<ReturnBase<Post>> GetPostAsync(int postId)
+        {
+            try
+            {
+                var result = await _posts
+                    .Where(x => x.Id == postId && !x.IsDeleted)
+                    .Include(x => x.User)
+                    .Include(x => x.PostPictures)
+                    .Include(x => x.Likes)
+                        .ThenInclude(l => l.User)
+                    .Include(x => x.Comments.Where(c => !c.IsDeleted && c.IsApproved))
+                        .ThenInclude(c => c.User)
+                    .Include(x => x.Comments)
+                        .ThenInclude(c => c.Replies.Where(r => !r.IsDeleted && r.IsApproved))
+                            .ThenInclude(r => r.User)
+                    .AsSplitQuery()
+                    .FirstOrDefaultAsync();
+
+                if (result is null)
+                    return Failed<Post>("Post no longer exists or has been deleted");
+
+                result.ViewsCount++;
+                await _dbContext.SaveChangesAsync();
+                return Success(result);
+            }
+            catch (Exception ex)
+            {
+                return Failed<Post>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
     }
 }

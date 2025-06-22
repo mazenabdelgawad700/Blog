@@ -1,5 +1,6 @@
 ﻿using Blog.API.Base;
 using Blog.Core.Featuers.Post.Command.Model;
+using Blog.Core.Featuers.Post.Query.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,12 @@ namespace Blog.API.Controllers.Post
         public async Task<IActionResult> Update([FromForm] UpdatePostCommand command)
         {
             var Result = await Mediator.Send(command);
+            return ReturnResult(Result);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetById([FromQuery] GetPostByIdQuery query)
+        {
+            var Result = await Mediator.Send(query);
             return ReturnResult(Result);
         }
     }
