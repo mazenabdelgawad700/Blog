@@ -339,5 +339,26 @@ namespace Blog.Service.Implementaions
                 return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
+        public async Task<ReturnBase<bool>> ChangePasswordAsync(string newPassword, string currentPassword, string userId)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+
+                if (user is null)
+                    return Failed<bool>("Invlaid id");
+
+                var changePasswordResult = await _userManager.ChangePasswordAsync(user!, currentPassword, newPassword);
+
+                if (!changePasswordResult.Succeeded)
+                    return Failed<bool>(changePasswordResult.Errors.FirstOrDefault()!.Description ?? "Can not change password, please try again");
+
+                return Success(true, "Password has been changed successfully");
+            }
+            catch (Exception ex)
+            {
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
     }
 }

@@ -46,5 +46,12 @@ namespace Blog.API.Controllers.Authentication
             ReturnBase<string> response = await Mediator.Send(command);
             return ReturnResult(response);
         }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
+        {
+            ReturnBase<bool> response = await Mediator.Send(command);
+            return ReturnResult(response);
+        }
     }
 }

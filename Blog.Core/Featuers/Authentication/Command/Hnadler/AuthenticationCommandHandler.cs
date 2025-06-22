@@ -11,6 +11,7 @@ namespace Blog.Core.Featuers.Authentication.Command.Hnadler
         IRequestHandler<ConfirmEmailCommand, ReturnBase<bool>>,
         IRequestHandler<ResetPasswordCommand, ReturnBase<bool>>,
         IRequestHandler<SendResetPasswordEmailCommand, ReturnBase<bool>>,
+        IRequestHandler<ChangePasswordCommand, ReturnBase<bool>>,
         IRequestHandler<LoginCommand, ReturnBase<string>>,
         IRequestHandler<RefreshTokenCommand, ReturnBase<string>>
     {
@@ -137,6 +138,21 @@ namespace Blog.Core.Featuers.Authentication.Command.Hnadler
                 return Failed<string>(ex.InnerException?.Message ?? ex.Message);
             }
         }
+        public async Task<ReturnBase<bool>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var changePasswordResult = await _authenticationService.ChangePasswordAsync(request.NewPassword, request.CurrentPassword, request.UserId);
 
+                if (!changePasswordResult.Succeeded)
+                    return Failed<bool>(changePasswordResult.Message);
+
+                return Success(true, changePasswordResult.Message);
+            }
+            catch (Exception ex)
+            {
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
     }
 }
