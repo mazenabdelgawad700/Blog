@@ -1,5 +1,5 @@
 ﻿using Blog.API.Base;
-using Blog.Core.Featuers.Post.Model;
+using Blog.Core.Featuers.Post.Command.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +11,13 @@ namespace Blog.API.Controllers.Post
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Add([FromForm] AddPostCommand command)
+        {
+            var Result = await Mediator.Send(command);
+            return ReturnResult(Result);
+        }
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> Update([FromForm] UpdatePostCommand command)
         {
             var Result = await Mediator.Send(command);
             return ReturnResult(Result);

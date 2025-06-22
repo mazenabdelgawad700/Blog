@@ -2,6 +2,7 @@
 using Blog.Infrastructure.Abstracts;
 using Blog.Service.Abstracts;
 using Blog.Shared.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Service.Implementaions
 {
@@ -29,6 +30,38 @@ namespace Blog.Service.Implementaions
             catch (Exception ex)
             {
                 return Failed<int>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<bool>> UpdatePostAsync(Post post)
+        {
+            try
+            {
+                var updatePostResult = await _postRespository.UpdateAsync(post);
+
+                if (!updatePostResult.Succeeded)
+                    return Failed<bool>(updatePostResult.Message);
+
+                return Success(true, "Post updated successfully");
+            }
+            catch (Exception ex)
+            {
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<Post>> GetPostForUpdateAsync(int postId)
+        {
+            try
+            {
+                var post = await _postRespository.GetTableNoTracking().Data.Where(x => x.Id == postId).FirstOrDefaultAsync();
+
+                if (post is null)
+                    return Failed<Post>("Invalid post id");
+
+                return Success(post);
+            }
+            catch (Exception ex)
+            {
+                return Failed<Post>(ex.InnerException?.Message ?? ex.Message);
             }
         }
     }
