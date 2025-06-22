@@ -64,6 +64,7 @@ namespace Blog.Infrastructure.Repositories
         public async Task<ReturnBase<IQueryable<Post>>> GetPostsAsync()
         {
             var posts = _posts
+                .Where(x => !x.IsDeleted)
                 .Include(x => x.User)
                 .Include(x => x.PostPictures)
                 .Include(x => x.Likes)
@@ -75,7 +76,7 @@ namespace Blog.Infrastructure.Repositories
         public async Task<ReturnBase<IQueryable<Post>>> GetUserPostsAsync(string userId)
         {
             var posts = _posts
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == userId && !x.IsDeleted)
                 .Include(x => x.User)
                 .Include(x => x.PostPictures)
                 .Include(x => x.Likes)

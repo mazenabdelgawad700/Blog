@@ -49,5 +49,12 @@ namespace Blog.API.Controllers.Post
             var Result = await Mediator.Send(command);
             return ReturnResult(Result);
         }
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> Delete([FromBody] DeletePostCommand command)
+        {
+            var Result = await Mediator.Send(command);
+            return ReturnResult(Result);
+        }
     }
 }

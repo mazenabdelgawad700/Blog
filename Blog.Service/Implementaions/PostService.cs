@@ -111,5 +111,28 @@ namespace Blog.Service.Implementaions
                 return Failed<IQueryable<Post>>(ex.InnerException?.Message ?? ex.Message);
             }
         }
+        public async Task<ReturnBase<bool>> DeletePostAsync(int postId)
+        {
+            try
+            {
+                var getPostResult = await _postRespository.GetByIdAsync(postId);
+
+                if (!getPostResult.Succeeded)
+                    return Failed<bool>(getPostResult.Message);
+
+                getPostResult.Data.IsDeleted = true;
+
+                var updatePostResult = await _postRespository.UpdateAsync(getPostResult.Data);
+
+                if (!updatePostResult.Succeeded)
+                    return Failed<bool>(updatePostResult.Message);
+
+                return Success(true);
+            }
+            catch (Exception ex)
+            {
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
     }
 }

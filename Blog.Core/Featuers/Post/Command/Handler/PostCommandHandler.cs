@@ -10,7 +10,8 @@ namespace Blog.Core.Featuers.Post.Command.Handler
     public class PostCommandHandler : ReturnBaseHandler,
         IRequestHandler<AddPostCommand, ReturnBase<bool>>,
         IRequestHandler<UpdatePostCommand, ReturnBase<bool>>,
-        IRequestHandler<ToggleLikeButtonCommand, ReturnBase<bool>>
+        IRequestHandler<ToggleLikeButtonCommand, ReturnBase<bool>>,
+        IRequestHandler<DeletePostCommand, ReturnBase<bool>>
     {
         private readonly IPostService _postService;
         private readonly IPostPictureService _postPictureService;
@@ -94,6 +95,20 @@ namespace Blog.Core.Featuers.Post.Command.Handler
                 if (!toggleLikeResult.Succeeded)
                     return Failed<bool>(toggleLikeResult.Message);
 
+                return Success(true);
+            }
+            catch (Exception ex)
+            {
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<bool>> Handle(DeletePostCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var deletePostResult = await _postService.DeletePostAsync(request.Id);
+                if (!deletePostResult.Succeeded)
+                    return Failed<bool>(deletePostResult.Message);
                 return Success(true);
             }
             catch (Exception ex)
