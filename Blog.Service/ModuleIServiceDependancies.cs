@@ -13,6 +13,8 @@ namespace Blog.Service
             services.AddTransient<ISendEmailService, SendEmailService>();
             services.AddTransient<IConfirmEmailService, ConfirmEmailService>();
             services.AddTransient<IApplicationUserService, ApplicationUserService>();
+            services.AddTransient<IPostService, PostService>();
+            services.AddTransient<IPostPictureService, PostPictureService>();
             return services;
         }
     }

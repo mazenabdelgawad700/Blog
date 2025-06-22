@@ -10,6 +10,8 @@ namespace Blog.Infrastructure
         {
             services.AddTransient<IAuthenticationRepository, AuthenticationRepository>();
             services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddTransient<IPostPictureRespository, PostPictureRespository>();
+            services.AddTransient<IPostRespository, PostRespository>();
             return services;
         }
     }

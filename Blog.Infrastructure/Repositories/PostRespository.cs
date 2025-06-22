@@ -1,0 +1,35 @@
+﻿using Blog.Domain.Entities;
+using Blog.Infrastructure.Abstracts;
+using Blog.Infrastructure.Context;
+using Blog.Infrastructure.RepositoriesBase;
+using Blog.Shared.Base;
+using Microsoft.EntityFrameworkCore;
+
+namespace Blog.Infrastructure.Repositories
+{
+    internal class PostRespository : BaseRepository<Post>, IPostRespository
+    {
+        private readonly AppDbContext _dbContext;
+        private readonly DbSet<Post> _posts;
+
+        public PostRespository(AppDbContext dbContext) : base(dbContext)
+        {
+            _dbContext = dbContext;
+            _posts = _dbContext.Set<Post>();
+        }
+
+        public async Task<ReturnBase<int>> AddPostAsync(Post post)
+        {
+            try
+            {
+                var result = await _posts.AddAsync(post);
+                await _dbContext.SaveChangesAsync();
+                return Success(result.Entity.Id);
+            }
+            catch (Exception ex)
+            {
+                return Failed<int>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+    }
+}
