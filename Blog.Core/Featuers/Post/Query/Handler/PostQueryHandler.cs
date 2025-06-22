@@ -11,6 +11,7 @@ namespace Blog.Core.Featuers.Post.Query.Handler
     public class PostQueryHandler : ReturnBaseHandler
         , IRequestHandler<GetPostByIdQuery, ReturnBase<GetPostByIdResponse>>
         , IRequestHandler<GetPostsQuery, ReturnBase<PaginatedResult<GetPostsResponse>>>
+        , IRequestHandler<GetUserPostsQuery, ReturnBase<PaginatedResult<GetUserPostsResponse>>>
     {
         private readonly IPostService _postService;
         private readonly IMapper _mapper;
@@ -63,6 +64,25 @@ namespace Blog.Core.Featuers.Post.Query.Handler
             catch (Exception ex)
             {
                 return Failed<PaginatedResult<GetPostsResponse>>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+
+        public async Task<ReturnBase<PaginatedResult<GetUserPostsResponse>>> Handle(GetUserPostsQuery request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var getUserPostsResult = await _postService.GetUserPostsAsync(request.Id);
+
+                if (!getUserPostsResult.Succeeded)
+                    return Failed<PaginatedResult<GetUserPostsResponse>>(getUserPostsResult.Message);
+
+                var mappedResult = await _mapper.ProjectTo<GetUserPostsResponse>(getUserPostsResult.Data).ToPaginatedListAsync(request.PageNumber, request.PageSize);
+
+                return Success(mappedResult);
+            }
+            catch (Exception ex)
+            {
+                return Failed<PaginatedResult<GetUserPostsResponse>>(ex.InnerException?.Message ?? ex.Message);
             }
         }
     }

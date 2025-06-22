@@ -35,5 +35,12 @@ namespace Blog.API.Controllers.Post
             var Result = await Mediator.Send(query);
             return ReturnResult(Result);
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUserPosts([FromQuery] GetUserPostsQuery query)
+        {
+            var Result = await Mediator.Send(query);
+            return ReturnResult(Result);
+        }
     }
 }

@@ -72,5 +72,17 @@ namespace Blog.Infrastructure.Repositories
 
             return await Task.FromResult(Success(posts));
         }
+        public async Task<ReturnBase<IQueryable<Post>>> GetUserPostsAsync(string userId)
+        {
+            var posts = _posts
+                .Where(x => x.UserId == userId)
+                .Include(x => x.User)
+                .Include(x => x.PostPictures)
+                .Include(x => x.Likes)
+                .OrderByDescending(x => x.CreatedAt)
+                .AsQueryable();
+
+            return await Task.FromResult(Success(posts));
+        }
     }
 }

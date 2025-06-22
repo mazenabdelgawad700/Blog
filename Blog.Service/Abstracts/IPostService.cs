@@ -10,5 +10,6 @@ namespace Blog.Service.Abstracts
         Task<ReturnBase<Post>> GetPostForUpdateAsync(int postId);
         Task<ReturnBase<Post>> GetPostByIdAsync(int postId);
         Task<ReturnBase<IQueryable<Post>>> GetPostsAsync();
+        Task<ReturnBase<IQueryable<Post>>> GetUserPostsAsync(string userId);
     }
 }
