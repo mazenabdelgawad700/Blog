@@ -46,6 +46,42 @@ namespace Blog.Service.Implementaions
                 return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }
+        public async Task<ReturnBase<bool>> DeleteCommentRepliesAsync(int commentId, string userId)
+        {
+            try
+            {
+                var commentResult = await _commentRepository.GetByIdAsync(commentId);
+
+                if (!commentResult.Succeeded)
+                    return Failed<bool>(commentResult.Message);
+
+
+                if (commentResult.Data.UserId != userId)
+                    return Failed<bool>("You are not allowed to do that");
+
+
+                if (commentResult.Data.IsDeleted)
+                    return Failed<bool>("Invalid Comment Id");
+
+
+                var repliesResult = _commentRepository.GetTableAsTracking().Data.Where(x => x.ParentCommentId == commentId).AsQueryable();
+
+                if (repliesResult is not null)
+                {
+                    foreach (var rep in repliesResult)
+                        rep.IsDeleted = true;
+                }
+
+                commentResult.Data.IsDeleted = true;
+                await _commentRepository.SaveChangesAsync();
+
+                return Success(true);
+            }
+            catch (Exception ex)
+            {
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
         public async Task<ReturnBase<Comment>> GetCommentForUpdateAsync(int commentId)
         {
             try

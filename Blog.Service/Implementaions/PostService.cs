@@ -120,6 +120,9 @@ namespace Blog.Service.Implementaions
                 if (!getPostResult.Succeeded)
                     return Failed<bool>(getPostResult.Message);
 
+                if (getPostResult.Data.IsDeleted)
+                    return Failed<bool>("Invalid post id");
+
                 getPostResult.Data.IsDeleted = true;
 
                 var updatePostResult = await _postRespository.UpdateAsync(getPostResult.Data);

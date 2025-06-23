@@ -37,5 +37,12 @@ namespace Blog.API.Controllers.Comment
             var result = await Mediator.Send(query);
             return ReturnResult(result);
         }
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> Delete([FromBody] DeleteCommentCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return ReturnResult(result);
+        }
     }
 }

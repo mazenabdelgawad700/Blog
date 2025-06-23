@@ -10,5 +10,6 @@ namespace Blog.Service.Abstracts
         Task<ReturnBase<Comment>> GetCommentForUpdateAsync(int commentId);
         Task<ReturnBase<IQueryable<Comment>>> GetPostCommentsAsync(int postId);
         Task<ReturnBase<IQueryable<Comment>>> GetCommentRepliesAsync(int commentId);
+        Task<ReturnBase<bool>> DeleteCommentRepliesAsync(int commentId, string userId);
     }
 }

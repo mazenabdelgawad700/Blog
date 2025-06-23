@@ -8,7 +8,8 @@ namespace Blog.Core.Featuers.Comment.Command.Handler
 {
     public class CommentCommandHandler : ReturnBaseHandler,
         IRequestHandler<AddCommentCommand, ReturnBase<bool>>,
-        IRequestHandler<UpdateCommentCommand, ReturnBase<bool>>
+        IRequestHandler<UpdateCommentCommand, ReturnBase<bool>>,
+        IRequestHandler<DeleteCommentCommand, ReturnBase<bool>>
     {
         private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
@@ -50,6 +51,22 @@ namespace Blog.Core.Featuers.Comment.Command.Handler
                 var updateResult = await _commentService.UpdateCommentAsync(commentResult.Data);
                 if (!updateResult.Succeeded)
                     return Failed<bool>(updateResult.Message);
+
+                return Success(true);
+            }
+            catch (Exception ex)
+            {
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<bool>> Handle(DeleteCommentCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var deleteCommentResult = await _commentService.DeleteCommentRepliesAsync(request.Id, request.UserId);
+
+                if (!deleteCommentResult.Succeeded)
+                    return Failed<bool>(deleteCommentResult.Message);
 
                 return Success(true);
             }
