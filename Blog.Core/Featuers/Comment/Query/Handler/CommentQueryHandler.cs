@@ -9,7 +9,8 @@ using MediatR;
 namespace Blog.Core.Featuers.Comment.Query.Handler
 {
     public class CommentQueryHandler : ReturnBaseHandler,
-        IRequestHandler<GetPostCommentsQuery, ReturnBase<PaginatedResult<GetPostCommentsResponse>>>
+        IRequestHandler<GetPostCommentsQuery, ReturnBase<PaginatedResult<GetPostCommentsResponse>>>,
+        IRequestHandler<GetCommentRepliesQuery, ReturnBase<PaginatedResult<GetCommentRepliesResponse>>>
     {
         private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
@@ -36,6 +37,24 @@ namespace Blog.Core.Featuers.Comment.Query.Handler
             catch (Exception ex)
             {
                 return Failed<PaginatedResult<GetPostCommentsResponse>>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+
+        public async Task<ReturnBase<PaginatedResult<GetCommentRepliesResponse>>> Handle(GetCommentRepliesQuery request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var getCommentRepliesResult = await _commentService.GetCommentRepliesAsync(request.ParentCommentId);
+                if (!getCommentRepliesResult.Succeeded)
+                    return Failed<PaginatedResult<GetCommentRepliesResponse>>(getCommentRepliesResult.Message);
+
+                var mappedResult = await _mapper.ProjectTo<GetCommentRepliesResponse>(getCommentRepliesResult.Data).ToPaginatedListAsync(request.PageNumber, request.PageSize);
+
+                return Success(mappedResult);
+            }
+            catch (Exception ex)
+            {
+                return Failed<PaginatedResult<GetCommentRepliesResponse>>(ex.InnerException?.Message ?? ex.Message);
             }
         }
     }

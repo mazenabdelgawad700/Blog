@@ -30,5 +30,12 @@ namespace Blog.API.Controllers.Comment
             var result = await Mediator.Send(query);
             return ReturnResult(result);
         }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCommentReplies([FromQuery] GetCommentRepliesQuery query)
+        {
+            var result = await Mediator.Send(query);
+            return ReturnResult(result);
+        }
     }
 }

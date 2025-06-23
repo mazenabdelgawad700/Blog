@@ -36,5 +36,23 @@ namespace Blog.Infrastructure.Repositories
                 return Failed<IQueryable<Comment>>(ex.InnerException?.Message ?? ex.Message);
             }
         }
+        public async Task<ReturnBase<IQueryable<Comment>>> GetCommentRepliesAsync(int commentId)
+        {
+            try
+            {
+                var comments = _comments
+                                .Include(x => x.User)
+                                .Include(x => x.Replies)
+                                .Where(x => x.ParentCommentId == commentId && !x.IsDeleted)
+                                .OrderBy(x => x.CreatedAt)
+                                .AsQueryable();
+
+                return await Task.FromResult(Success(comments));
+            }
+            catch (Exception ex)
+            {
+                return Failed<IQueryable<Comment>>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
     }
 }
