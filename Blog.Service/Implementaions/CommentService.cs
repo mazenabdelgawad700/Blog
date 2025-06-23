@@ -2,6 +2,7 @@
 using Blog.Infrastructure.Abstracts;
 using Blog.Service.Abstracts;
 using Blog.Shared.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Service.Implementaions
 {
@@ -42,6 +43,41 @@ namespace Blog.Service.Implementaions
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<Comment>> GetCommentForUpdateAsync(int commentId)
+        {
+            try
+            {
+                var comment = await _commentRepository.GetTableNoTracking().Data.Where(x => x.Id == commentId).FirstOrDefaultAsync();
+
+                if (comment is null)
+                    return Failed<Comment>("Comment dose not exist");
+
+                return Success(comment);
+            }
+            catch (Exception ex)
+            {
+                return Failed<Comment>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<bool>> UpdateCommentAsync(Comment comment)
+        {
+            try
+            {
+                var updateCommentResult = await _commentRepository.UpdateAsync(comment);
+
+                if (!updateCommentResult.Succeeded)
+                    return Failed<bool>(updateCommentResult.Message);
+
+                comment.UpdatedAt = DateTime.UtcNow;
+                await _postRespository.SaveChangesAsync();
+
+                return Success(true);
+            }
+            catch (Exception ex)
+            {
                 return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
             }
         }

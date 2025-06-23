@@ -15,5 +15,12 @@ namespace Blog.API.Controllers.Comment
             var result = await Mediator.Send(command);
             return ReturnResult(result);
         }
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> Update([FromBody] UpdateCommentCommand command)
+        {
+            var result = await Mediator.Send(command);
+            return ReturnResult(result);
+        }
     }
 }

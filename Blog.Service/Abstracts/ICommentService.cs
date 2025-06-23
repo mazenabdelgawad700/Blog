@@ -6,5 +6,7 @@ namespace Blog.Service.Abstracts
     public interface ICommentService
     {
         Task<ReturnBase<bool>> AddCommentAsync(Comment comment);
+        Task<ReturnBase<bool>> UpdateCommentAsync(Comment comment);
+        Task<ReturnBase<Comment>> GetCommentForUpdateAsync(int commentId);
     }
 }

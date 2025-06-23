@@ -7,7 +7,8 @@ using MediatR;
 namespace Blog.Core.Featuers.Comment.Command.Handler
 {
     public class CommentCommandHandler : ReturnBaseHandler,
-        IRequestHandler<AddCommentCommand, ReturnBase<bool>>
+        IRequestHandler<AddCommentCommand, ReturnBase<bool>>,
+        IRequestHandler<UpdateCommentCommand, ReturnBase<bool>>
     {
         private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
@@ -26,6 +27,29 @@ namespace Blog.Core.Featuers.Comment.Command.Handler
 
                 if (!addCommentResult.Succeeded)
                     return Failed<bool>(addCommentResult.Message);
+
+                return Success(true);
+            }
+            catch (Exception ex)
+            {
+                return Failed<bool>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+        public async Task<ReturnBase<bool>> Handle(UpdateCommentCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var commentResult = await _commentService.GetCommentForUpdateAsync(request.Id);
+
+                if (!commentResult.Succeeded)
+                    return Failed<bool>(commentResult.Message);
+
+                if (!string.IsNullOrEmpty(request.Content))
+                    commentResult.Data.Content = request.Content;
+
+                var updateResult = await _commentService.UpdateCommentAsync(commentResult.Data);
+                if (!updateResult.Succeeded)
+                    return Failed<bool>(updateResult.Message);
 
                 return Success(true);
             }
