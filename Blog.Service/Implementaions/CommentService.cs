@@ -62,6 +62,22 @@ namespace Blog.Service.Implementaions
                 return Failed<Comment>(ex.InnerException?.Message ?? ex.Message);
             }
         }
+        public async Task<ReturnBase<IQueryable<Comment>>> GetPostCommentsAsync(int postId)
+        {
+            try
+            {
+                var commentsResult = await _commentRepository.GetAllCommentsAsync(postId);
+
+                if (!commentsResult.Succeeded)
+                    return Failed<IQueryable<Comment>>("Comment dose not exist");
+
+                return Success(commentsResult.Data!);
+            }
+            catch (Exception ex)
+            {
+                return Failed<IQueryable<Comment>>(ex.InnerException?.Message ?? ex.Message);
+            }
+        }
         public async Task<ReturnBase<bool>> UpdateCommentAsync(Comment comment)
         {
             try
