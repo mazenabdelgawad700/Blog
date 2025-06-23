@@ -2,6 +2,7 @@
 using Blog.Core;
 using Blog.Infrastructure;
 using Blog.Infrastructure.Context;
+using Blog.Infrastructure.Hubs;
 using Blog.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-
+        builder.Services.AddSignalR();
         builder.Services.AddDbContext<AppDbContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -79,6 +80,7 @@ public class Program
             scope.Dispose();
         }
 
+        app.MapHub<NotificationHub>("/notificationHub");
 
         app.Run();
     }
