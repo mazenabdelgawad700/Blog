@@ -16,6 +16,7 @@ namespace Blog.Service
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<IPostPictureService, PostPictureService>();
             services.AddTransient<ILikeService, LikeService>();
+            services.AddTransient<ICommentService, CommentService>();
             return services;
         }
     }

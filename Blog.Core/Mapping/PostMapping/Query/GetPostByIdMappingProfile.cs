@@ -26,7 +26,7 @@ namespace Blog.Core.Mapping.PostMapping.Query
                 .ForMember(dest => dest.UserProfilePicture, opt => opt.MapFrom(src => src.User.ProfilePictureUrl));
 
             // Comment mapping with recursive replies
-            CreateMap<Comment, CommentDto>()
+            CreateMap<Domain.Entities.Comment, CommentDto>()
                 .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.IsDeleted ? "[Comment deleted]" : src.Content))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName ?? "Unknown"))
                 .ForMember(dest => dest.UserProfilePicture, opt => opt.MapFrom(src => src.User.ProfilePictureUrl))
